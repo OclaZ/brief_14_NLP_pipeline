@@ -1,0 +1,16 @@
+plan/
+venv/
+__pycache__/
+*.pyc
+.idea/
+.DS_Store
+*.log
+*.env
+*.sqlite3
+*.db
+*.bak
+*.tmp
+*.swp
+*.swo
+*.zip
+data/

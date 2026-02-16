@@ -1,0 +1,12 @@
+venv/
+.git/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.db
+.DS_Store
+chroma_db_data/
+models/
+.ipynb_checkpoints/
+*.ipynb

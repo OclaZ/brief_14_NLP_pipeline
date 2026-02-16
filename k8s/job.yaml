@@ -1,0 +1,33 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: nlp-training-job
+spec:
+  # Nombre de tentatives avant de déclarer l'échec (utile si problème réseau temporaire)
+  backoffLimit: 2
+  # Temps max d'exécution (ex: 10 minutes) pour éviter les jobs zombies
+  activeDeadlineSeconds: 600
+  template:
+    spec:
+      containers:
+        - name: training-container
+          image: ticket-classifier:v1.2
+          # CRUCIAL pour Docker Desktop : "IfNotPresent" ou "Never"
+          # force K8s à utiliser l'image locale que vous avez buildée
+          imagePullPolicy: IfNotPresent
+
+          # Montage du volume pour sauvegarder le modèle
+          volumeMounts:
+            - mountPath: /app/models
+              name: ml-output-storage
+              subPath: models
+            - mountPath: /app/chroma_db_data
+              name: ml-output-storage
+              subPath: chroma
+
+      restartPolicy: OnFailure
+
+      volumes:
+        - name: ml-output-storage
+          persistentVolumeClaim:
+            claimName: ml-pipeline-pvc

@@ -3,3 +3,7 @@ matplotlib
 seaborn
 numpy
 nltk
+sentence-transformers
+chromadb
+scikit-learn
+joblib

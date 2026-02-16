@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: nlp-training-cronjob
+spec:
+  schedule: "0 0 * * *" # Exécution tous les jours à minuit
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: training-container
+              image: ticket-classifier:v1.2
+              imagePullPolicy: IfNotPresent
+              volumeMounts:
+                - mountPath: /app/models
+                  name: ml-output-storage
+                  subPath: models
+                - mountPath: /app/chroma_db_data
+                  name: ml-output-storage
+                  subPath: chroma
+          restartPolicy: OnFailure
+          volumes:
+            - name: ml-output-storage
+              persistentVolumeClaim:
+                claimName: ml-pipeline-pvc
